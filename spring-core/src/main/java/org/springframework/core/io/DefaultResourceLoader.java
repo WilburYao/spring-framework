@@ -144,6 +144,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
 
+		//优先使用自定义协议加载策略,进行Resource加载
 		for (ProtocolResolver protocolResolver : this.protocolResolvers) {
 			Resource resource = protocolResolver.resolve(location, this);
 			if (resource != null) {
@@ -151,6 +152,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 			}
 		}
 
+		//根据不同location格式,返回响应的Resource类型.
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
