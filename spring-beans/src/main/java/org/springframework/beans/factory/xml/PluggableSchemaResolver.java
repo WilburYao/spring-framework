@@ -138,6 +138,7 @@ public class PluggableSchemaResolver implements EntityResolver {
 	 * Load the specified schema mappings lazily.
 	 */
 	private Map<String, String> getSchemaMappings() {
+		//以单例的方式读取META-INF/spring.schames构造map
 		Map<String, String> schemaMappings = this.schemaMappings;
 		if (schemaMappings == null) {
 			synchronized (this) {

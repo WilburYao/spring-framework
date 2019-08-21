@@ -82,9 +82,13 @@ public class DelegatingEntityResolver implements EntityResolver {
 	public InputSource resolveEntity(String publicId, @Nullable String systemId) throws SAXException, IOException {
 		if (systemId != null) {
 			if (systemId.endsWith(DTD_SUFFIX)) {
+				//如果校验文件为dtd, 则使用BeansDtdResolver来解析. 先检验publicId和systemId,
+				//然后直接使用在classpath中的spring-beans.dtd作为Resource.
 				return this.dtdResolver.resolveEntity(publicId, systemId);
 			}
 			else if (systemId.endsWith(XSD_SUFFIX)) {
+				//如果校验文件为xsd, 使用spring.schemas中的映射关系,
+				//使用classpath中对应的xsd文件作为Resource.
 				return this.schemaResolver.resolveEntity(publicId, systemId);
 			}
 		}
