@@ -319,6 +319,8 @@ public class BeanDefinitionParserDelegate {
 	 * @param root the root element of the current bean definition document (or nested beans element)
 	 */
 	protected void populateDefaults(DocumentDefaultsDefinition defaults, @Nullable DocumentDefaultsDefinition parentDefaults, Element root) {
+		//确定当前delegate的默认属性值
+		//当前无设置,则使用父Delegate中的值;当前有设置,使用当前设置属性值.
 		String lazyInit = root.getAttribute(DEFAULT_LAZY_INIT_ATTRIBUTE);
 		if (DEFAULT_VALUE.equals(lazyInit)) {
 			// Potentially inherited from outer <beans> sections, otherwise falling back to false.

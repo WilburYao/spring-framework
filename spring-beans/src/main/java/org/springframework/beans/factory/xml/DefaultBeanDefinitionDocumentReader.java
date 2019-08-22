@@ -126,10 +126,16 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		// the new (child) delegate with a reference to the parent for fallback purposes,
 		// then ultimately reset this.delegate back to its original (parent) reference.
 		// this behavior emulates a stack of delegates without actually necessitating one.
+		//beans标签内嵌beans标签时,会递归调用此方法.
+		//BeanDefinitionParserDelegate类型存储了readerContext和父beans节点作用的default属性,
+		//可能是父beans自定义或者从祖先beans中继承下来.
+		//第一次进到此方法时, delegate为null, 即表示此时不存在父beans.
+		//每次createDelegate都会根据parent和当前root节点来,确定default属性值.
 		BeanDefinitionParserDelegate parent = this.delegate;
 		this.delegate = createDelegate(getReaderContext(), root, parent);
 
 		if (this.delegate.isDefaultNamespace(root)) {
+			//当标签在默认命名空间时, 检查环境配置中PROFILE属性是否激活.如果激活才进行beans注册.
 			String profileSpec = root.getAttribute(PROFILE_ATTRIBUTE);
 			if (StringUtils.hasText(profileSpec)) {
 				String[] specifiedProfiles = StringUtils.tokenizeToStringArray(
@@ -148,6 +154,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		parseBeanDefinitions(root, this.delegate);
 		postProcessXml(root);
 
+		//处理完当前beans节点,将父Delegate设置回来
 		this.delegate = parent;
 	}
 
@@ -166,9 +173,11 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 */
 	protected void parseBeanDefinitions(Element root, BeanDefinitionParserDelegate delegate) {
 		if (delegate.isDefaultNamespace(root)) {
+			//解析默认命名空间下的root标签.
 			NodeList nl = root.getChildNodes();
 			for (int i = 0; i < nl.getLength(); i++) {
 				Node node = nl.item(i);
+				//遍历子节点,当子节点为element类型时,进行解析.即跳过文本节点和注释节点.
 				if (node instanceof Element) {
 					Element ele = (Element) node;
 					if (delegate.isDefaultNamespace(ele)) {
