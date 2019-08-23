@@ -564,7 +564,7 @@ public class BeanDefinitionParserDelegate {
 	 */
 	public AbstractBeanDefinition parseBeanDefinitionAttributes(Element ele, String beanName,
 			@Nullable BeanDefinition containingBean, AbstractBeanDefinition bd) {
-
+		//从ele中提取各种属性设置到bd中.
 		if (ele.hasAttribute(SINGLETON_ATTRIBUTE)) {
 			error("Old 1.x 'singleton' attribute in use - upgrade to 'scope' declaration", ele);
 		}
