@@ -508,6 +508,8 @@ public class BeanDefinitionParserDelegate {
 	public AbstractBeanDefinition parseBeanDefinitionElement(
 			Element ele, String beanName, @Nullable BeanDefinition containingBean) {
 
+		//栈式结构记录解析标签过程.类似函数调用栈, 父标签入栈,子标签入栈.
+		//当解析出错时, 可以提供具体的栈式出错信息.
 		this.parseState.push(new BeanEntry(beanName));
 
 		String className = null;

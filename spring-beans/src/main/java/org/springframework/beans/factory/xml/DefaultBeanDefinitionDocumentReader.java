@@ -131,6 +131,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		//可能是父beans自定义或者从祖先beans中继承下来.
 		//第一次进到此方法时, delegate为null, 即表示此时不存在父beans.
 		//每次createDelegate都会根据parent和当前root节点来,确定default属性值.
+		//一个Delegate与一个beans标签对应
 		BeanDefinitionParserDelegate parent = this.delegate;
 		this.delegate = createDelegate(getReaderContext(), root, parent);
 
