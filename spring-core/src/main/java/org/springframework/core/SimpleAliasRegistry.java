@@ -46,6 +46,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 		Assert.hasText(name, "'name' must not be empty");
 		Assert.hasText(alias, "'alias' must not be empty");
 		if (alias.equals(name)) {
+			//本命与别名相同则去除别名.
 			this.aliasMap.remove(alias);
 		}
 		else {
@@ -177,8 +178,11 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	 * @see #registerAlias
 	 * @see #hasAlias
 	 */
+	//准备添加name->alias
 	protected void checkForAliasCircle(String name, String alias) {
+		//检查是否存在alias->name
 		if (hasAlias(alias, name)) {
+			//检查存在, 则别名成环, 异常.
 			throw new IllegalStateException("Cannot register alias '" + alias +
 					"' for name '" + name + "': Circular reference - '" +
 					name + "' is a direct or indirect alias for '" + alias + "' already");
