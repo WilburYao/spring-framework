@@ -1370,6 +1370,10 @@ public class BeanDefinitionParserDelegate {
 		return parseCustomElement(ele, null);
 	}
 
+	//主要就是三步:
+	//1)利用命名空间找命名空间Handler
+	//2)利用标签元素找Parser
+	//3)利用Parser解析模板方法parse方法来注册BeanDefinition.
 	@Nullable
 	public BeanDefinition parseCustomElement(Element ele, @Nullable BeanDefinition containingBd) {
 		//获取自定义标签命名空间
