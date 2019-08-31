@@ -264,6 +264,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		else {
 			// Fail if we're already creating this bean instance:
 			// We're assumably within a circular reference.
+			//scope为Prototype时出现循环依赖, 直接抛异常.
 			if (isPrototypeCurrentlyInCreation(beanName)) {
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
@@ -288,12 +289,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 			}
 
+			//如果不仅仅为类型检查,则在alreadyCreated中添加beanName标记.
 			if (!typeCheckOnly) {
 				markBeanAsCreated(beanName);
 			}
 
 			try {
+				//获取注册的GenericBeanDefinition并将其转化为RootBeanDefinition
 				final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
+				//检查RootBeanDefinition是否为Abstract
 				checkMergedBeanDefinition(mbd, beanName, args);
 
 				// Guarantee initialization of beans that the current bean depends on.
@@ -305,7 +309,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 							throw new BeanCreationException(mbd.getResourceDescription(), beanName,
 									"Circular depends-on relationship between '" + beanName + "' and '" + dep + "'");
 						}
+						//将依赖关系写到两个依赖缓存中.
 						registerDependentBean(dep, beanName);
+						//递归获取依赖对象
 						getBean(dep);
 					}
 				}
