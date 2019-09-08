@@ -104,7 +104,7 @@ class ConstructorResolver {
 	 */
 	public BeanWrapper autowireConstructor(final String beanName, final RootBeanDefinition mbd,
 			@Nullable Constructor<?>[] chosenCtors, @Nullable final Object[] explicitArgs) {
-
+		//利用构造函数来创建实例的过程与利用工厂方法来创建实例的过程大致类似.
 		BeanWrapperImpl bw = new BeanWrapperImpl();
 		this.beanFactory.initBeanWrapper(bw);
 
@@ -182,6 +182,7 @@ class ConstructorResolver {
 				ArgumentsHolder argsHolder;
 				if (resolvedValues != null) {
 					try {
+						//解析ConstructorProperty注解
 						String[] paramNames = ConstructorPropertiesChecker.evaluate(candidate, paramTypes.length);
 						if (paramNames == null) {
 							ParameterNameDiscoverer pnd = this.beanFactory.getParameterNameDiscoverer();
