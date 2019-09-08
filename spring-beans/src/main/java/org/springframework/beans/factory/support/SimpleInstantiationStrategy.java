@@ -88,6 +88,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 		}
 		else {
 			// Must generate CGLIB subclass.
+			//存在Spring方法存在, 使用CGLIB动态代理生成代理对象
 			return instantiateWithMethodInjection(bd, beanName, owner);
 		}
 	}
