@@ -1356,7 +1356,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				pvs = mbd.getPropertyValues();
 			}
 			PropertyDescriptor[] filteredPds = filterPropertyDescriptorsForDependencyCheck(bw, mbd.allowCaching);
-			if (hasInstAwareBpps) {
+			if (hasInstAwareBpps) {//利用BeanPostProcessors来修改属性值以及检查是否所有依赖均满足,如@Required
 				for (BeanPostProcessor bp : getBeanPostProcessors()) {
 					if (bp instanceof InstantiationAwareBeanPostProcessor) {
 						InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor) bp;
@@ -1372,7 +1372,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 		}
 
-		if (pvs != null) {
+		if (pvs != null) {//将解析的依赖值注入bw
 			applyPropertyValues(beanName, mbd, bw, pvs);
 		}
 	}
@@ -1601,6 +1601,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		if (pvs instanceof MutablePropertyValues) {
 			mpvs = (MutablePropertyValues) pvs;
 			if (mpvs.isConverted()) {
+				//如果mpvs已经完成类型转换则直接注入
 				// Shortcut: use the pre-converted values as-is.
 				try {
 					bw.setPropertyValues(mpvs);
@@ -1611,6 +1612,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 							mbd.getResourceDescription(), beanName, "Error setting property values", ex);
 				}
 			}
+			//获取原始pv列表
 			original = mpvs.getPropertyValueList();
 		}
 		else {
@@ -1627,22 +1629,27 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		List<PropertyValue> deepCopy = new ArrayList<>(original.size());
 		boolean resolveNecessary = false;
 		for (PropertyValue pv : original) {
+			//当前pv已完成转换,直接写入deepCopy
 			if (pv.isConverted()) {
 				deepCopy.add(pv);
 			}
 			else {
 				String propertyName = pv.getName();
 				Object originalValue = pv.getValue();
+				//属性值转换,ref与复合类型分别转换为bean和对应的Collection
 				Object resolvedValue = valueResolver.resolveValueIfNecessary(pv, originalValue);
 				Object convertedValue = resolvedValue;
+				//当属性可以写入并且不为内嵌属性或下标指示属性,可以执行类型转化
 				boolean convertible = bw.isWritableProperty(propertyName) &&
 						!PropertyAccessorUtils.isNestedOrIndexedProperty(propertyName);
 				if (convertible) {
+					//类型转换如String->int
 					convertedValue = convertForProperty(resolvedValue, propertyName, bw, converter);
 				}
 				// Possibly store converted value in merged bean definition,
 				// in order to avoid re-conversion for every created bean instance.
 				if (resolvedValue == originalValue) {
+					//原始值是自动织入
 					if (convertible) {
 						pv.setConvertedValue(convertedValue);
 					}
@@ -1651,16 +1658,19 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				else if (convertible && originalValue instanceof TypedStringValue &&
 						!((TypedStringValue) originalValue).isDynamic() &&
 						!(convertedValue instanceof Collection || ObjectUtils.isArray(convertedValue))) {
+					//原始值时简单类型
 					pv.setConvertedValue(convertedValue);
 					deepCopy.add(pv);
 				}
 				else {
+					//原始值时复合类型,标记需要解析
 					resolveNecessary = true;
 					deepCopy.add(new PropertyValue(pv, convertedValue));
 				}
 			}
 		}
 		if (mpvs != null && !resolveNecessary) {
+			//当所有pv都不需要解析时, pvs才设置为已经转化
 			mpvs.setConverted();
 		}
 
