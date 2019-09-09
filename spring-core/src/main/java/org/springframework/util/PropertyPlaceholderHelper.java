@@ -127,6 +127,9 @@ public class PropertyPlaceholderHelper {
 	protected String parseStringValue(
 			String value, PlaceholderResolver placeholderResolver, Set<String> visitedPlaceholders) {
 
+		//解析字符串属性值
+		//1)获取${}中的值ps, 然后从配置属性中读取
+		//2)如果不存在, 则利用valueSeparator将ps分割成两部分, 利用前半部分查找配置属性, 如果查找失败, 后半部分充当默认值.
 		StringBuilder result = new StringBuilder(value);
 
 		int startIndex = value.indexOf(this.placeholderPrefix);
