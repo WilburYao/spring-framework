@@ -1786,7 +1786,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 */
 	protected void invokeInitMethods(String beanName, final Object bean, @Nullable RootBeanDefinition mbd)
 			throws Throwable {
-		//两类init方法
+		//两类init方法:实现InitializingBean或者指定init-method,建议使用第二种,避免Spring框架对项目代码的入侵.
 		boolean isInitializingBean = (bean instanceof InitializingBean);
 		if (isInitializingBean && (mbd == null || !mbd.isExternallyManagedInitMethod("afterPropertiesSet"))) {
 			//如果bean实现了InitializingBean,则直接调用afterPropertiesSet
