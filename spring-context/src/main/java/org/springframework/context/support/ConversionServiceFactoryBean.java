@@ -70,6 +70,7 @@ public class ConversionServiceFactoryBean implements FactoryBean<ConversionServi
 	@Override
 	public void afterPropertiesSet() {
 		this.conversionService = createConversionService();
+		//自定义类型转换:实现转换器(GenericConverter,Converter,ConverterFactory)->注入到ConversionServiceFactoryBean的converters中
 		ConversionServiceFactory.registerConverters(this.converters, this.conversionService);
 	}
 
