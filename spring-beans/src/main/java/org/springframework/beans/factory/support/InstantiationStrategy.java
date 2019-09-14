@@ -34,6 +34,7 @@ import org.springframework.lang.Nullable;
  * @since 1.1
  */
 public interface InstantiationStrategy {
+	//实例化策略接口
 
 	/**
 	 * Return an instance of the bean with the given name in this factory.
