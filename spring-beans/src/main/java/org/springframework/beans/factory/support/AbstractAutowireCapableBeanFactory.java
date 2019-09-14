@@ -491,7 +491,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		try {
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
-			//InstantiationAwareBeanPostProcessor类型处理,AOP也是利用这个来进行动态代理.
+			//InstantiationAwareBeanPostProcessor类型处理,对特定的类使用特别的方式生成对象, 而不走通用的实例化过程.
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			if (bean != null) {
 				return bean;
