@@ -1,7 +1,7 @@
 package org.springframework.tests.sample.beans;
 
 public class TestBeanFactory {
-	public TestBean getTestBean() {
-		return new TestBean();
+	public TestBean getTestBean(String name, int age) {
+		return new TestBean(name, age);
 	}
 }

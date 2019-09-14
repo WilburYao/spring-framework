@@ -410,6 +410,7 @@ class ConstructorResolver {
 				}
 			}
 			if (argsToResolve != null) {
+				//将Spring内置的参数类型如TypedStringValue转换成实际使用的参数类型如, int,String.
 				argsToUse = resolvePreparedArguments(beanName, mbd, bw, factoryMethodToUse, argsToResolve);
 			}
 		}

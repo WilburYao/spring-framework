@@ -136,6 +136,7 @@ public class XmlBeanDefinitionReaderTests {
 		Resource resource = new ClassPathResource(resourceName, getClass());
 		new XmlBeanDefinitionReader(factory).loadBeanDefinitions(resource);
 		TestBean bean = (TestBean) factory.getBean("testBean");
+		TestBean bean1 = (TestBean) factory.getBean("testBean");
 		System.out.println(bean.getName());
 		System.out.println(bean.getAge());
 		System.out.println(bean.getSomeList());
