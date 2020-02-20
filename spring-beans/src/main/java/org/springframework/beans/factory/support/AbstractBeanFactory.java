@@ -1272,10 +1272,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					BeanDefinition pbd;
 					try {
 						String parentBeanName = transformedBeanName(bd.getParentName());
-						if (!beanName.equals(parentBeanName)) {
+						if (!beanName.equals(parentBeanName)) {//parent的name与当前bean的name不相等，则直接加载parent的mbd
 							pbd = getMergedBeanDefinition(parentBeanName);
 						}
-						else {
+						else {//当前beanName与parent的BeanName相等，说明parent是从上级Factory中继承而来，则从父Factory中加载
 							BeanFactory parent = getParentBeanFactory();
 							if (parent instanceof ConfigurableBeanFactory) {
 								pbd = ((ConfigurableBeanFactory) parent).getMergedBeanDefinition(parentBeanName);
