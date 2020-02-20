@@ -1108,18 +1108,18 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		Supplier<?> instanceSupplier = mbd.getInstanceSupplier();
-		if (instanceSupplier != null) {
+		if (instanceSupplier != null) {//通过Supplier创建
 			return obtainFromSupplier(instanceSupplier, beanName);
 		}
 
-		if (mbd.getFactoryMethodName() != null)  {
+		if (mbd.getFactoryMethodName() != null)  {//通过静态或实例FactoryMethod创建
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
 		}
 
 		// Shortcut when re-creating the same bean...
 		boolean resolved = false;
 		boolean autowireNecessary = false;
-		//当未显示指定调用参数的时候, 如果之前已经解析过, 可以直接复用之前的解析结果.
+		//当未显示指定调用参数的时候, 如果之前已经解析过, 可以直接复用之前的解析结果（即使用哪个构造函数）
 		if (args == null) {
 			synchronized (mbd.constructorArgumentLock) {
 				if (mbd.resolvedConstructorOrFactoryMethod != null) {
@@ -1130,10 +1130,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 		if (resolved) {
 			if (autowireNecessary) {
-				return autowireConstructor(beanName, mbd, null, null);
+				return autowireConstructor(beanName, mbd, null, null);//使用解析缓存的某个非默认构造函数
 			}
 			else {
-				return instantiateBean(beanName, mbd);
+				return instantiateBean(beanName, mbd);//使用默认构造函数
 			}
 		}
 
