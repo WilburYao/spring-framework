@@ -162,7 +162,7 @@ class ConstructorResolver {
 							"] from ClassLoader [" + beanClass.getClassLoader() + "] failed", ex);
 				}
 			}
-			AutowireUtils.sortConstructors(candidates);
+			AutowireUtils.sortConstructors(candidates);//构造函数排序，public参数多到少，non-public参数多到少
 			int minTypeDiffWeight = Integer.MAX_VALUE;
 			Set<Constructor<?>> ambiguousConstructors = null;
 			LinkedList<UnsatisfiedDependencyException> causes = null;

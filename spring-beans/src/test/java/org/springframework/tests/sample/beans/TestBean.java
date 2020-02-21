@@ -28,9 +28,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.BeanNameAware;
+import org.springframework.beans.factory.*;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -41,13 +40,15 @@ import org.springframework.util.ObjectUtils;
  * @author Stephane Nicoll
  * @since 15 April 2001
  */
-public class TestBean implements BeanNameAware, BeanFactoryAware, ITestBean, IOther, Comparable<Object> {
+public class TestBean implements BeanNameAware, BeanFactoryAware, ITestBean, IOther, Comparable<Object> , DisposableBean {
 
 	private String beanName;
 
 	private String country;
 
 	private BeanFactory beanFactory;
+
+	private Pet pet;
 
 	private boolean postProcessed;
 
@@ -458,6 +459,7 @@ public class TestBean implements BeanNameAware, BeanFactoryAware, ITestBean, IOt
 
 
 	public void destroy() {
+		System.out.println("dedede");
 		this.destroyed = true;
 	}
 
@@ -498,4 +500,12 @@ public class TestBean implements BeanNameAware, BeanFactoryAware, ITestBean, IOt
 		return this.name;
 	}
 
+	public Pet getPet() {
+		return pet;
+	}
+
+	@Required
+	public void setPet(Pet pet) {
+		this.pet = pet;
+	}
 }

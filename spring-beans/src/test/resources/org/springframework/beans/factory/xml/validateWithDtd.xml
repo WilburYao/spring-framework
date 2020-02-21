@@ -9,9 +9,12 @@ This is a top level block comment
 <!-- more trickery-->  <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd"><!-- some nasty stuff -->
 
 <beans>
-	<bean id = "testFactoryBean" class="org.springframework.tests.sample.beans.TestFactoryBean" depends-on="">
-		<property name="name" value="asuka"/>
-		<property name="age" value="21"/>
+	<bean name="pet" class="org.springframework.tests.sample.beans.Pet">
+		<constructor-arg index="0" value="misamisa"/>
+ 	</bean>
+
+	<bean id = "testBean" class="org.springframework.tests.sample.beans.TestBean" autowire="byType" destroy-method="">
+		<property name="beanName" value="asuka"/>
+		<property name="country" value="China"/>
 	</bean>
-	<!--<bean id="testBean" class="org.springframework.tests.sample.beans.TestBean"/>-->
 </beans>
