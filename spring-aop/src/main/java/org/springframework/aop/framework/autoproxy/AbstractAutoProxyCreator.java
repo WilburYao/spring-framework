@@ -342,7 +342,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		}
 		if (Boolean.FALSE.equals(this.advisedBeans.get(cacheKey))) {
 			return bean;
-		}
+		}//如果是AOP基础类则不处理直接返回
 		if (isInfrastructureClass(bean.getClass()) || shouldSkip(bean.getClass(), beanName)) {
 			this.advisedBeans.put(cacheKey, Boolean.FALSE);
 			return bean;
@@ -450,16 +450,16 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.copyFrom(this);
-
+		//proxy-targe-class默认配置或者显示配置为false
 		if (!proxyFactory.isProxyTargetClass()) {
 			if (shouldProxyTargetClass(beanClass, beanName)) {
 				proxyFactory.setProxyTargetClass(true);
 			}
-			else {
+			else {//如果未实现接口则将proxy-targe-class设置为true
 				evaluateProxyInterfaces(beanClass, proxyFactory);
 			}
 		}
-
+		//proxy-targe-class为true用CGLIG，为false用JDK动态代理创建代理对象
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
 		proxyFactory.addAdvisors(advisors);
 		proxyFactory.setTargetSource(targetSource);

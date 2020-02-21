@@ -62,10 +62,10 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 			if (advisor instanceof PointcutAdvisor) {
 				// Add it conditionally.
 				PointcutAdvisor pointcutAdvisor = (PointcutAdvisor) advisor;
-				if (config.isPreFiltered() || pointcutAdvisor.getPointcut().getClassFilter().matches(actualClass)) {
-					MethodInterceptor[] interceptors = registry.getInterceptors(advisor);
+				if (config.isPreFiltered() || pointcutAdvisor.getPointcut().getClassFilter().matches(actualClass)) {//类匹配
+					MethodInterceptor[] interceptors = registry.getInterceptors(advisor);//advisor中的advice转interceptors
 					MethodMatcher mm = pointcutAdvisor.getPointcut().getMethodMatcher();
-					if (MethodMatchers.matches(mm, method, actualClass, hasIntroductions)) {
+					if (MethodMatchers.matches(mm, method, actualClass, hasIntroductions)) {//方法匹配
 						if (mm.isRuntime()) {
 							// Creating a new object instance in the getInterceptors() method
 							// isn't a problem as we normally cache created chains.

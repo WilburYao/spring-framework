@@ -8,7 +8,9 @@
 	<!--
 	<bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator" />
 	-->
-
+	<!--
+	创建一个AnnotationAwareAspectAutoProxyCreator的bpp
+	-->
 	<aop:aspectj-autoproxy/>
 
 	<bean class="org.springframework.aop.aspectj.autoproxy.MultiplyReturnValue">
