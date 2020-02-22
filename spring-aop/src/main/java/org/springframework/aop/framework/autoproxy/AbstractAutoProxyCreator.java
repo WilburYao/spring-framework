@@ -459,7 +459,6 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 				evaluateProxyInterfaces(beanClass, proxyFactory);
 			}
 		}
-		//proxy-targe-class为true用CGLIG，为false用JDK动态代理创建代理对象
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
 		proxyFactory.addAdvisors(advisors);
 		proxyFactory.setTargetSource(targetSource);
@@ -469,7 +468,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		if (advisorsPreFiltered()) {
 			proxyFactory.setPreFiltered(true);
 		}
-
+		//proxy-targe-class为true用CGLIG，为false用JDK动态代理创建代理对象
 		return proxyFactory.getProxy(getProxyClassLoader());
 	}
 
